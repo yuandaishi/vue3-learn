@@ -1,23 +1,57 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import useNum from './hooks/useTest'
+import { onMounted, getCurrentInstance, inject, provide, ref, reactive, toRefs } from 'vue';
+let app = getCurrentInstance();
+console.log(app)
+console.log(this);
+onMounted(() => {
+  console.log(this, 'asdasd')
+})
+const vFocus = {
+  mounted: (el: HTMLInputElement) => el.focus()
+}
+provide('a', 'asd');
+let num = ref(10);
+let me = reactive({
+  name: 'yds',
+  sex: 'man'
+})
+const { name, sex } = toRefs(me);
+let btn = () => {
+  num.value += 1;
+}
+let changeMe = () => {
+  me.name += 1;
+}
 </script>
 
 <template>
+  <div class="some-class"></div>
+  <loading></loading>
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-
+      <p>{{ useNum(10) }}</p>
+      <Teleport to=".some-class">
+        <p>{{ inject('message') }}xcaasda</p>
+      </Teleport>
+      <input type="text" v-focus>
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
   </header>
-
-  <RouterView />
+  <p>{{ num }}</p>
+  <p>{{ me.name }}</p>
+  <p>{{ name }}</p>
+  <el-button @click="btn" type="primary">点击按钮</el-button>
+  <el-button @click="changeMe" type="primary">changeMe</el-button>
+  <!-- <RouterView /> -->
 </template>
 
 <style scoped>
